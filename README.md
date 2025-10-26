@@ -1,3 +1,1 @@
-# SignUp Landpage and Keycloak with Google Integration AspNetCore Sample
-
-
+# Exemplo de landpage para adesão de usuário integrada ao Keycloak e Google 
