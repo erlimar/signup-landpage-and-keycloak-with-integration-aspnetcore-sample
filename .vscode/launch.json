@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "WebApp Debug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/WebApp/bin/Debug/net8.0/SignUpKeycloakGoogleIntegration.WebApp.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/WebApp",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:8443;http://localhost:8080"
+      }
+    }
+  ]
+}
