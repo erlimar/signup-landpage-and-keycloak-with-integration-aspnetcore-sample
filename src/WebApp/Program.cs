@@ -1,10 +1,36 @@
 // Copyright (c) 2025 Erlimar Silva Campos. All Rights Reserved.
 // This file is a part of SignUpKeycloakGoogleIntegration
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+IConfigurationSection config = builder.Configuration.GetSection("Authentication:Google");
+
+string clientId = config["ClientId"]!;
+string clientSecret = config["ClientSecret"]!;
+
+builder
+    .Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddGoogle(
+        GoogleDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.ClientId = clientId;
+            options.ClientSecret = clientSecret;
+            options.SaveTokens = true;
+            options.CallbackPath = "/signin/external/google";
+        }
+    );
 
 WebApplication app = builder.Build();
 
@@ -22,6 +48,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

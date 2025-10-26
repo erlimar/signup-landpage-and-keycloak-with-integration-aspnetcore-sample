@@ -6,5 +6,20 @@
 
 <div class="text-center">
     <h1 class="display-4">Seja bem vindo!</h1>
-    <p>{{ @User.Identity.Name }}</p>
+    <p>{{ @Model.FullName | @User.Identity.AuthenticationType }}</p>
+
+    <hr />
+    <h4>Claims:</h4>
+    @foreach (var c in User.Claims)
+    {
+      <span>@c.Type: <strong>@c.Value</strong><br /></span>
+    }
+
+    <hr />
+    <h4>Properties:</h4>
+    <span>Id: @Model.Id</span><br />
+    <span>Email: @Model.Email</span><br />
+    <span>FullName: @Model.FullName</span><br />
+    <span>FirstName: @Model.FirstName</span><br />
+    <span>LastName: @Model.LastName</span><br />
 </div>
