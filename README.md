@@ -9,10 +9,16 @@ válido cadastrado no Keycloak, onde ele poderá fazer login usando sua conta do
 
 ## Iniciando no desenvolvimento
 
+Primeiramente você vai precisar configurar o ID e segredo de sua aplicação Google:
+```sh
+./eng/secrets-set.sh Authentication:Google:ClientId "<valor>"
+./eng/secrets-set.sh Authentication:Google:ClientSecret "<valor>"
+```
+
 ```sh
 dotnet restore
 dotnet tool restore
-./dev-watch.sh
+./eng/dev-watch.sh
 
 # Isso é tudo que você precisa para começar a codificar com
 # a aplicação disponível em http://localhost:8080
