@@ -68,6 +68,10 @@ dotnet_style_prefer_simplified_interpolation = true:suggestion
 # Field preferences
 dotnet_style_readonly_field = true:warning
 
+# Namespace preferences
+dotnet_style_namespace_declaration = file_scoped:warning
+dotnet_style_namespace_match_folder = true
+
 # Parameter preferences
 dotnet_code_quality_unused_parameters = all:suggestion
 
