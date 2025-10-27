@@ -19,7 +19,7 @@ Primeiramente você vai precisar configurar o ID e segredo de sua aplicação Go
 dotnet restore
 dotnet tool restore
 
-# Se for só executar a aplicação
+# Se for desenvolver sem TDD
 ./eng/dev-watch.sh
 
 # Se for desenvolver com TDD
