@@ -21,7 +21,7 @@ public class UserSignUpCommandTest
     {
         UserSignUpCommand command = new()
         {
-            Id = invalidId,
+            GoogleId = invalidId,
             Name = "ValidUserName",
             Email = "valid@email.com",
         };
@@ -50,7 +50,7 @@ public class UserSignUpCommandTest
         UserSignUpCommand command = new()
         {
             Name = invalidName,
-            Id = "ValidUserId",
+            GoogleId = "ValidUserId",
             Email = "valid@email.com",
         };
 
@@ -81,7 +81,7 @@ public class UserSignUpCommandTest
         UserSignUpCommand command = new()
         {
             Email = invalidEmail,
-            Id = "ValidUserId",
+            GoogleId = "ValidUserId",
             Name = "ValidUserName",
         };
 

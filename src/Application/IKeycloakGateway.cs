@@ -6,4 +6,17 @@ namespace SignUpKeycloakGoogleIntegration.Application;
 /// <summary>
 /// Integração com API administrativa do Keycloak
 /// </summary>
-public interface IKeycloakGateway { }
+public interface IKeycloakGateway
+{
+    /// <summary>
+    /// Obtém o identificador do usuário pelo e-mail
+    /// </summary>
+    /// <returns>Quando usuário existe, retorna um valor diferente de vazio</returns>
+    Task<string?> GetUserIdByEmailAsync(string userEmail);
+
+    /// <summary>
+    /// Obtém o identificador Google vinculado a um usuário
+    /// </summary>
+    /// <returns>Quando há um vínculo Google, retorna um valor diferente de vazio</returns>
+    Task<string?> GetGoogleLinkedIdAsync(string userId);
+}

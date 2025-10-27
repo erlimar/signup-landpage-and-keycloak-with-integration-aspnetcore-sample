@@ -9,7 +9,7 @@ public class UserSignUpValidator : AbstractValidator<UserSignUpCommand>
 {
     public UserSignUpValidator()
     {
-        _ = RuleFor(static user => user.Id).NotEmpty();
+        _ = RuleFor(static user => user.GoogleId).NotEmpty();
         _ = RuleFor(static user => user.Name).NotEmpty();
         _ = RuleFor(static user => user.Email).NotEmpty().EmailAddress();
     }
