@@ -7,6 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DCDBE456-946
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignUpKeycloakGoogleIntegration.WebApp", "src\WebApp\SignUpKeycloakGoogleIntegration.WebApp.csproj", "{BF85805D-C3BD-449A-BEFF-0A5CA25428C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignUpKeycloakGoogleIntegration.Application", "src\Application\SignUpKeycloakGoogleIntegration.Application.csproj", "{2DF761A2-7644-44A3-BE83-C69E083E0898}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E8068912-1F23-4369-9208-09FE90CF789A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignUpKeycloakGoogleIntegration.ApplicationTests", "test\ApplicationTests\SignUpKeycloakGoogleIntegration.ApplicationTests.csproj", "{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +26,18 @@ Global
 		{BF85805D-C3BD-449A-BEFF-0A5CA25428C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF85805D-C3BD-449A-BEFF-0A5CA25428C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF85805D-C3BD-449A-BEFF-0A5CA25428C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF761A2-7644-44A3-BE83-C69E083E0898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF761A2-7644-44A3-BE83-C69E083E0898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF761A2-7644-44A3-BE83-C69E083E0898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF761A2-7644-44A3-BE83-C69E083E0898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF85805D-C3BD-449A-BEFF-0A5CA25428C3} = {DCDBE456-946C-4056-B606-F80FB3F57F0C}
+		{2DF761A2-7644-44A3-BE83-C69E083E0898} = {DCDBE456-946C-4056-B606-F80FB3F57F0C}
+		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5} = {E8068912-1F23-4369-9208-09FE90CF789A}
 	EndGlobalSection
 EndGlobal

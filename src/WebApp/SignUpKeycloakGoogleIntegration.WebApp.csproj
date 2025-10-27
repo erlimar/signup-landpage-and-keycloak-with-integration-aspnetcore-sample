@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Application\SignUpKeycloakGoogleIntegration.Application.csproj" />
+  </ItemGroup>
+
 </Project>
