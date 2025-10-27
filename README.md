@@ -18,7 +18,12 @@ Primeiramente você vai precisar configurar o ID e segredo de sua aplicação Go
 ```sh
 dotnet restore
 dotnet tool restore
+
+# Se for só executar a aplicação
 ./eng/dev-watch.sh
+
+# Se for desenvolver com TDD
+./eng/dev-watch-test.sh
 
 # Isso é tudo que você precisa para começar a codificar com
 # a aplicação disponível em http://localhost:8080
