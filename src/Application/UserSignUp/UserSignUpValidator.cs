@@ -3,7 +3,7 @@
 
 using FluentValidation;
 
-namespace SignUpKeycloakGoogleIntegration.Application;
+namespace SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
 public class UserSignUpValidator : AbstractValidator<UserSignUpCommand>
 {

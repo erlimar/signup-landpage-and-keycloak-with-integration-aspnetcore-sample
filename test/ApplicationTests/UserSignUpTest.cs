@@ -2,7 +2,7 @@
 // This file is a part of SignUpKeycloakGoogleIntegration
 
 using FluentValidation;
-using SignUpKeycloakGoogleIntegration.Application;
+using SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
 namespace SignUpKeycloakGoogleIntegration.ApplicationTests;
 
@@ -32,7 +32,7 @@ public class UserSignUpTest
             validator.ValidateAndThrow(command)
         );
 
-        Assert.Single(ex.Errors);
+        _ = Assert.Single(ex.Errors);
         Assert.Contains("Id:", ex.Message);
     }
 
@@ -60,7 +60,7 @@ public class UserSignUpTest
             validator.ValidateAndThrow(command)
         );
 
-        Assert.Single(ex.Errors);
+        _ = Assert.Single(ex.Errors);
         Assert.Contains("Name:", ex.Message);
     }
 
