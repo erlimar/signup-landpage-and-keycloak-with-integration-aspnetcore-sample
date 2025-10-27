@@ -10,6 +10,9 @@ namespace SignUpKeycloakGoogleIntegration.ApplicationTests;
 
 public class UserSignUpHandlerTest
 {
+    /// <summary>
+    /// O manipulador requer um <see cref="IKeycloakGateway"/>
+    /// </summary>
     [Fact]
     [Trait("target", nameof(UserSignUpHandler))]
     public void KeycloakGatewayEhObrigatorio()
@@ -21,6 +24,9 @@ public class UserSignUpHandlerTest
         Assert.Equal("keycloakGateway", ex.ParamName);
     }
 
+    /// <summary>
+    /// Ao manipular, um <see cref="UserSignUpCommand"/> é obrigatório
+    /// </summary>
     [Fact]
     [Trait("target", nameof(UserSignUpHandler))]
     public async Task CommandEhObrigatorio()
@@ -35,6 +41,10 @@ public class UserSignUpHandlerTest
         Assert.Equal("command", ex.ParamName);
     }
 
+    /// <summary>
+    /// Um <see cref="UserSignUpCommand"/> com dados válidos é necessário
+    /// para a manipulação do comando
+    /// </summary>
     [Theory]
     [MemberData(nameof(InvalidCommands))]
     [Trait("target", nameof(UserSignUpHandler))]
