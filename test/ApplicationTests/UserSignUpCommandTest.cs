@@ -6,7 +6,7 @@ using SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
 namespace SignUpKeycloakGoogleIntegration.ApplicationTests;
 
-public class UserSignUpTest
+public class UserSignUpCommandTest
 {
     /// <summary>
     /// O identificador do usuário deve ser informado, e não pode ser
