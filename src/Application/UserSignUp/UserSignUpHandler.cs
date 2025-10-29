@@ -16,29 +16,49 @@ public class UserSignUpHandler(IKeycloakGateway keycloakGateway)
 
         new UserSignUpValidator().ValidateAndThrow(command);
 
-        string keycloakUserId = await _keycloakGateway.GetUserIdByEmailAsync(command.Email);
+        string? keycloakUserId = await _keycloakGateway.GetUserIdByEmailAsync(command.Email);
 
         if (!string.IsNullOrWhiteSpace(keycloakUserId))
         {
-            return await ValidarUsuarioCadastrado(keycloakUserId);
+            return await ValidarUsuarioCadastrado(keycloakUserId, command.GoogleId);
         }
 
-        throw new NotImplementedException();
+        var newUserKeycloakId = await _keycloakGateway.WriteNewUser(command.Name, command.Email);
+
+        // TODO: Falhar se não for um Id válido
+
+        await _keycloakGateway.WriteGoogleLink(newUserKeycloakId, command.GoogleId);
+
+        return new UserSignUpCommandResponse
+        {
+            ResponseType = UserSignUpResponseType.NewRegistration,
+            ResponseMessage = null,
+        };
     }
 
-    private async Task<UserSignUpCommandResponse> ValidarUsuarioCadastrado(string keycloakUserId)
+    private async Task<UserSignUpCommandResponse> ValidarUsuarioCadastrado(
+        string keycloakUserId,
+        string commandUserId
+    )
     {
-        string googleLinkId = await _keycloakGateway.GetGoogleLinkedIdAsync(keycloakUserId);
+        string? googleLinkId = await _keycloakGateway.GetGoogleLinkedIdAsync(keycloakUserId);
 
-        if (string.IsNullOrWhiteSpace(googleLinkId))
-        {
-            return new UserSignUpCommandResponse
+        return string.IsNullOrWhiteSpace(googleLinkId)
+                ? new UserSignUpCommandResponse
+                {
+                    ResponseType = UserSignUpResponseType.RegisteredWithoutLink,
+                    ResponseMessage = null,
+                }
+            : googleLinkId != commandUserId
+                ? new UserSignUpCommandResponse
+                {
+                    ResponseType = UserSignUpResponseType.Failed,
+                    ResponseMessage = "O usuário já está vinculado a outra conta Google",
+                }
+            : new UserSignUpCommandResponse
             {
-                ResponseType = UserSignUpResponseType.RegisteredWithoutLink,
+                ResponseType = UserSignUpResponseType.AlreadyRegistered,
                 ResponseMessage = null,
             };
-        }
-
-        throw new NotImplementedException();
     }
 }

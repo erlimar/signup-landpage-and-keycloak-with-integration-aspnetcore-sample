@@ -130,7 +130,6 @@ public class UserSignUpHandlerTest
     public async Task CadastroSemVinculoDeveSerInformado()
     {
         string existingUserId = "existing-user-id";
-        string? responseGoogleLink = null;
 
         UserSignUpCommand command = new()
         {
@@ -147,7 +146,7 @@ public class UserSignUpHandlerTest
 
         _ = keycloakGatewayMock
             .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
-            .ReturnsAsync(responseGoogleLink);
+            .ReturnsAsync(null! as string);
 
         UserSignUpHandler handler = new(keycloakGatewayMock.Object);
 
@@ -161,128 +160,130 @@ public class UserSignUpHandlerTest
         keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
     }
 
-    /// /// <summary>
-    /// /// TODO:
-    /// /// Quando um usuário está cadastrado com vínculo Google, mas esse vínculo
-    /// /// é diferente do atual <see cref="UserSignUpResponseType.Failed"/> deve
-    /// /// ser retornado com uma mensagem indicando o problema
-    /// /// </summary>
-    /// [Fact]
-    /// [Trait("target", nameof(UserSignUpHandler))]
-    /// public async Task CadastroComVinculoDiferenteGeraFalha()
-    /// {
-    ///     string existingUserId = "existing-user-id";
-    ///     string? responseGoogleLink = null;
-    ///
-    ///     UserSignUpCommand command = new()
-    ///     {
-    ///         GoogleId = "user-id",
-    ///         Email = "user@email.com",
-    ///         Name = "User Name",
-    ///     };
-    ///
-    ///     Mock<IKeycloakGateway> keycloakGatewayMock = new();
-    ///
-    ///     _ = keycloakGatewayMock
-    ///         .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
-    ///         .ReturnsAsync(existingUserId);
-    ///
-    ///     _ = keycloakGatewayMock
-    ///         .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
-    ///         .ReturnsAsync(responseGoogleLink);
-    ///
-    ///     UserSignUpHandler handler = new(keycloakGatewayMock.Object);
-    ///
-    ///     UserSignUpCommandResponse response = await handler.HandleAsync(command);
-    ///
-    ///     Assert.NotNull(response);
-    ///     Assert.Equal(UserSignUpResponseType.RegisteredWithoutLink, response.ResponseType);
-    ///     Assert.Null(response.ResponseMessage);
-    ///
-    ///     keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-    ///     keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
-    /// }
-    ///
-    /// /// <summary>
-    /// /// TODO:
-    /// /// Quando um usuário está cadastrado com vínculo Google igual
-    /// /// ao atual, indica que o usuário já está cadastrado
-    /// /// </summary>
-    /// [Fact]
-    /// [Trait("target", nameof(UserSignUpHandler))]
-    /// public async Task CadastroComVinculoIgualIndicaJaCadastrado()
-    /// {
-    ///     string existingUserId = "existing-user-id";
-    ///     string? responseGoogleLink = null;
-    ///
-    ///     UserSignUpCommand command = new()
-    ///     {
-    ///         GoogleId = "user-id",
-    ///         Email = "user@email.com",
-    ///         Name = "User Name",
-    ///     };
-    ///
-    ///     Mock<IKeycloakGateway> keycloakGatewayMock = new();
-    ///
-    ///     _ = keycloakGatewayMock
-    ///         .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
-    ///         .ReturnsAsync(existingUserId);
-    ///
-    ///     _ = keycloakGatewayMock
-    ///         .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
-    ///         .ReturnsAsync(responseGoogleLink);
-    ///
-    ///     UserSignUpHandler handler = new(keycloakGatewayMock.Object);
-    ///
-    ///     UserSignUpCommandResponse response = await handler.HandleAsync(command);
-    ///
-    ///     Assert.NotNull(response);
-    ///     Assert.Equal(UserSignUpResponseType.RegisteredWithoutLink, response.ResponseType);
-    ///     Assert.Null(response.ResponseMessage);
-    ///
-    ///     keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-    ///     keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
-    /// }
-    ///
-    /// /// <summary>
-    /// /// TODO:
-    /// /// Quando o usuário não existir, esse deve ser cadastrado
-    /// /// </summary>
-    /// [Fact]
-    /// [Trait("target", nameof(UserSignUpHandler))]
-    /// public async Task QuandoUsuarioNaoExistirDeveSerCadastrado()
-    /// {
-    ///     string existingUserId = "existing-user-id";
-    ///     string? responseGoogleLink = null;
-    ///
-    ///     UserSignUpCommand command = new()
-    ///     {
-    ///         GoogleId = "user-id",
-    ///         Email = "user@email.com",
-    ///         Name = "User Name",
-    ///     };
-    ///
-    ///     Mock<IKeycloakGateway> keycloakGatewayMock = new();
-    ///
-    ///     _ = keycloakGatewayMock
-    ///         .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
-    ///         .ReturnsAsync(existingUserId);
-    ///
-    ///     _ = keycloakGatewayMock
-    ///         .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
-    ///         .ReturnsAsync(responseGoogleLink);
-    ///
-    ///     UserSignUpHandler handler = new(keycloakGatewayMock.Object);
-    ///
-    ///     UserSignUpCommandResponse response = await handler.HandleAsync(command);
-    ///
-    ///     Assert.NotNull(response);
-    ///     Assert.Equal(UserSignUpResponseType.RegisteredWithoutLink, response.ResponseType);
-    ///     Assert.Null(response.ResponseMessage);
-    ///
-    ///     keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-    ///     keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
-    /// }
+    /// <summary>
+    /// Quando um usuário está cadastrado com vínculo Google, mas esse vínculo
+    /// é diferente do atual <see cref="UserSignUpResponseType.Failed"/> deve
+    /// ser retornado com uma mensagem indicando o problema
+    /// </summary>
+    [Fact]
+    [Trait("target", nameof(UserSignUpHandler))]
+    public async Task CadastroComVinculoDiferenteGeraFalha()
+    {
+        string existingUserId = "existing-user-id";
+
+        UserSignUpCommand command = new()
+        {
+            GoogleId = "user-id",
+            Email = "user@email.com",
+            Name = "User Name",
+        };
+
+        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+
+        _ = keycloakGatewayMock
+            .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(existingUserId);
+
+        _ = keycloakGatewayMock
+            .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
+            .ReturnsAsync("user-id-diferente");
+
+        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+
+        UserSignUpCommandResponse response = await handler.HandleAsync(command);
+
+        Assert.NotNull(response);
+        Assert.Equal(UserSignUpResponseType.Failed, response.ResponseType);
+        Assert.NotNull(response.ResponseMessage);
+        Assert.Equal("O usuário já está vinculado a outra conta Google", response.ResponseMessage);
+
+        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
+    }
+
+    /// <summary>
+    /// Quando um usuário está cadastrado com vínculo Google igual
+    /// ao atual, indica que o usuário já está cadastrado
+    /// </summary>
+    [Fact]
+    [Trait("target", nameof(UserSignUpHandler))]
+    public async Task CadastroComVinculoIgualIndicaJaCadastrado()
+    {
+        string existingUserId = "existing-user-id";
+
+        UserSignUpCommand command = new()
+        {
+            GoogleId = "user-id",
+            Email = "user@email.com",
+            Name = "User Name",
+        };
+
+        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+
+        _ = keycloakGatewayMock
+            .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(existingUserId);
+
+        _ = keycloakGatewayMock
+            .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
+            .ReturnsAsync("user-id");
+
+        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+
+        UserSignUpCommandResponse response = await handler.HandleAsync(command);
+
+        Assert.NotNull(response);
+        Assert.Equal(UserSignUpResponseType.AlreadyRegistered, response.ResponseType);
+        Assert.Null(response.ResponseMessage);
+
+        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
+    }
+
+    /// <summary>
+    /// Quando o usuário não existir, esse deve ser cadastrado
+    /// </summary>
+    [Fact]
+    [Trait("target", nameof(UserSignUpHandler))]
+    public async Task QuandoUsuarioNaoExistirDeveSerCadastrado()
+    {
+        UserSignUpCommand command = new()
+        {
+            GoogleId = "user-id",
+            Email = "user@email.com",
+            Name = "User Name",
+        };
+
+        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+
+        _ = keycloakGatewayMock
+            .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync(null! as string);
+
+        _ = keycloakGatewayMock
+            .Setup(m => m.WriteNewUser(command.Name, command.Email))
+            .ReturnsAsync("novo-usuario-id-keycloak");
+
+        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+
+        UserSignUpCommandResponse response = await handler.HandleAsync(command);
+
+        Assert.NotNull(response);
+        Assert.Equal(UserSignUpResponseType.NewRegistration, response.ResponseType);
+        Assert.Null(response.ResponseMessage);
+
+        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(It.IsAny<string>()), Times.Never);
+        keycloakGatewayMock.Verify(v => v.WriteNewUser(command.Name, command.Email), Times.Once);
+        keycloakGatewayMock.Verify(
+            v => v.WriteGoogleLink("novo-usuario-id-keycloak", command.GoogleId),
+            Times.Once
+        );
+    }
+
+    // TODO: Testar quando tentar gravar usuário com o Gateway e não retornar um ID válido FAIL
+    // TODO: Testar quando qualquer exceção ocorrer no Gateway FAIL com "Falha interna no gateway do serviço de identidade"
+
     public static IEnumerable<object[]> InvalidCommands =>
         [
             [

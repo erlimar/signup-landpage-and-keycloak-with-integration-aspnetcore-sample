@@ -19,4 +19,14 @@ public interface IKeycloakGateway
     /// </summary>
     /// <returns>Quando há um vínculo Google, retorna um valor diferente de vazio</returns>
     Task<string?> GetGoogleLinkedIdAsync(string userId);
+
+    /// <summary>
+    /// Grava um novo usuário
+    /// </summary>
+    Task<string> WriteNewUser(string name, string email);
+
+    /// <summary>
+    /// Vincula um usuário a uma conta Google
+    /// </summary>
+    Task WriteGoogleLink(string keycloakUserId, string googleUserId);
 }
