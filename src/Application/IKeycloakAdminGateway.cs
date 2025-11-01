@@ -6,7 +6,7 @@ namespace SignUpKeycloakGoogleIntegration.Application;
 /// <summary>
 /// Integração com API administrativa do Keycloak
 /// </summary>
-public interface IKeycloakGateway
+public interface IKeycloakAdminGateway
 {
     /// <summary>
     /// Obtém o identificador do usuário pelo e-mail

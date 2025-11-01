@@ -11,7 +11,7 @@ namespace SignUpKeycloakGoogleIntegration.ApplicationTests;
 public class UserSignUpHandlerTest
 {
     /// <summary>
-    /// O manipulador requer um <see cref="IKeycloakGateway"/>
+    /// O manipulador requer um <see cref="IKeycloakAdminGateway"/>
     /// </summary>
     [Fact]
     [Trait("target", nameof(UserSignUpHandler))]
@@ -21,7 +21,7 @@ public class UserSignUpHandlerTest
             new UserSignUpHandler(null!)
         );
 
-        Assert.Equal("keycloakGateway", ex.ParamName);
+        Assert.Equal("keycloakAdminGateway", ex.ParamName);
     }
 
     /// <summary>
@@ -31,8 +31,8 @@ public class UserSignUpHandlerTest
     [Trait("target", nameof(UserSignUpHandler))]
     public async Task CommandEhObrigatorio()
     {
-        IKeycloakGateway keycloakGateway = new Mock<IKeycloakGateway>().Object;
-        UserSignUpHandler handler = new(keycloakGateway);
+        IKeycloakAdminGateway keycloakAdminGateway = new Mock<IKeycloakAdminGateway>().Object;
+        UserSignUpHandler handler = new(keycloakAdminGateway);
 
         ArgumentNullException ex = await Assert.ThrowsAsync<ArgumentNullException>(() =>
             handler.HandleAsync(null!)
@@ -50,8 +50,8 @@ public class UserSignUpHandlerTest
     [Trait("target", nameof(UserSignUpHandler))]
     public async Task RequerCommandValido(UserSignUpCommand invalidCommand)
     {
-        IKeycloakGateway keycloakGateway = new Mock<IKeycloakGateway>().Object;
-        UserSignUpHandler handler = new(keycloakGateway);
+        IKeycloakAdminGateway keycloakAdminGateway = new Mock<IKeycloakAdminGateway>().Object;
+        UserSignUpHandler handler = new(keycloakAdminGateway);
 
         _ = await Assert.ThrowsAsync<ValidationException>(() =>
             handler.HandleAsync(invalidCommand)
@@ -59,7 +59,7 @@ public class UserSignUpHandlerTest
     }
 
     /// <summary>
-    /// Quando o comando é válido, <see cref="IKeycloakGateway"/> deve ser
+    /// Quando o comando é válido, <see cref="IKeycloakAdminGateway"/> deve ser
     /// consultado para verificar a existência do usuário
     /// </summary>
     [Fact]
@@ -73,9 +73,9 @@ public class UserSignUpHandlerTest
             Name = "User Name",
         };
 
-        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+        Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
 
-        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+        UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
 
         try
         {
@@ -83,7 +83,7 @@ public class UserSignUpHandlerTest
         }
         catch (Exception) { }
 
-        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
     }
 
     /// <summary>
@@ -103,13 +103,13 @@ public class UserSignUpHandlerTest
             Name = "User Name",
         };
 
-        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+        Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
             .ReturnsAsync(existingUserId);
 
-        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+        UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
 
         try
         {
@@ -117,8 +117,8 @@ public class UserSignUpHandlerTest
         }
         catch (Exception) { }
 
-        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
     }
 
     /// <summary>
@@ -138,17 +138,17 @@ public class UserSignUpHandlerTest
             Name = "User Name",
         };
 
-        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+        Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
             .ReturnsAsync(existingUserId);
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
             .ReturnsAsync(null! as string);
 
-        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+        UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
 
         UserSignUpCommandResponse response = await handler.HandleAsync(command);
 
@@ -156,8 +156,8 @@ public class UserSignUpHandlerTest
         Assert.Equal(UserSignUpResponseType.RegisteredWithoutLink, response.ResponseType);
         Assert.Null(response.ResponseMessage);
 
-        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
     }
 
     /// <summary>
@@ -178,17 +178,17 @@ public class UserSignUpHandlerTest
             Name = "User Name",
         };
 
-        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+        Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
             .ReturnsAsync(existingUserId);
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
             .ReturnsAsync("user-id-diferente");
 
-        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+        UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
 
         UserSignUpCommandResponse response = await handler.HandleAsync(command);
 
@@ -197,8 +197,8 @@ public class UserSignUpHandlerTest
         Assert.NotNull(response.ResponseMessage);
         Assert.Equal("O usuário já está vinculado a outra conta Google", response.ResponseMessage);
 
-        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
     }
 
     /// <summary>
@@ -218,17 +218,17 @@ public class UserSignUpHandlerTest
             Name = "User Name",
         };
 
-        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+        Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
             .ReturnsAsync(existingUserId);
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetGoogleLinkedIdAsync(existingUserId))
             .ReturnsAsync("user-id");
 
-        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+        UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
 
         UserSignUpCommandResponse response = await handler.HandleAsync(command);
 
@@ -236,8 +236,8 @@ public class UserSignUpHandlerTest
         Assert.Equal(UserSignUpResponseType.AlreadyRegistered, response.ResponseType);
         Assert.Null(response.ResponseMessage);
 
-        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakAdminGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(existingUserId), Times.Once);
     }
 
     /// <summary>
@@ -254,17 +254,17 @@ public class UserSignUpHandlerTest
             Name = "User Name",
         };
 
-        Mock<IKeycloakGateway> keycloakGatewayMock = new();
+        Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.GetUserIdByEmailAsync(It.IsAny<string>()))
             .ReturnsAsync(null! as string);
 
-        _ = keycloakGatewayMock
+        _ = keycloakAdminGatewayMock
             .Setup(m => m.WriteNewUser(command.Name, command.Email))
             .ReturnsAsync("novo-usuario-id-keycloak");
 
-        UserSignUpHandler handler = new(keycloakGatewayMock.Object);
+        UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
 
         UserSignUpCommandResponse response = await handler.HandleAsync(command);
 
@@ -272,10 +272,16 @@ public class UserSignUpHandlerTest
         Assert.Equal(UserSignUpResponseType.NewRegistration, response.ResponseType);
         Assert.Null(response.ResponseMessage);
 
-        keycloakGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
-        keycloakGatewayMock.Verify(v => v.GetGoogleLinkedIdAsync(It.IsAny<string>()), Times.Never);
-        keycloakGatewayMock.Verify(v => v.WriteNewUser(command.Name, command.Email), Times.Once);
-        keycloakGatewayMock.Verify(
+        keycloakAdminGatewayMock.Verify(v => v.GetUserIdByEmailAsync(command.Email), Times.Once);
+        keycloakAdminGatewayMock.Verify(
+            v => v.GetGoogleLinkedIdAsync(It.IsAny<string>()),
+            Times.Never
+        );
+        keycloakAdminGatewayMock.Verify(
+            v => v.WriteNewUser(command.Name, command.Email),
+            Times.Once
+        );
+        keycloakAdminGatewayMock.Verify(
             v => v.WriteGoogleLink("novo-usuario-id-keycloak", command.GoogleId),
             Times.Once
         );

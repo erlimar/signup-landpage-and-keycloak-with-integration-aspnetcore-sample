@@ -5,10 +5,10 @@ using FluentValidation;
 
 namespace SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
-public class UserSignUpHandler(IKeycloakGateway keycloakGateway)
+public class UserSignUpHandler(IKeycloakAdminGateway keycloakAdminGateway)
 {
-    private readonly IKeycloakGateway _keycloakGateway =
-        keycloakGateway ?? throw new ArgumentNullException(nameof(keycloakGateway));
+    private readonly IKeycloakAdminGateway _keycloakAdminGateway =
+        keycloakAdminGateway ?? throw new ArgumentNullException(nameof(keycloakAdminGateway));
 
     public async Task<UserSignUpCommandResponse> HandleAsync(UserSignUpCommand command)
     {
@@ -16,18 +16,21 @@ public class UserSignUpHandler(IKeycloakGateway keycloakGateway)
 
         new UserSignUpValidator().ValidateAndThrow(command);
 
-        string? keycloakUserId = await _keycloakGateway.GetUserIdByEmailAsync(command.Email);
+        string? keycloakUserId = await _keycloakAdminGateway.GetUserIdByEmailAsync(command.Email);
 
         if (!string.IsNullOrWhiteSpace(keycloakUserId))
         {
             return await ValidarUsuarioCadastrado(keycloakUserId, command.GoogleId);
         }
 
-        var newUserKeycloakId = await _keycloakGateway.WriteNewUser(command.Name, command.Email);
+        var newUserKeycloakId = await _keycloakAdminGateway.WriteNewUser(
+            command.Name,
+            command.Email
+        );
 
         // TODO: Falhar se não for um Id válido
 
-        await _keycloakGateway.WriteGoogleLink(newUserKeycloakId, command.GoogleId);
+        await _keycloakAdminGateway.WriteGoogleLink(newUserKeycloakId, command.GoogleId);
 
         return new UserSignUpCommandResponse
         {
@@ -41,7 +44,7 @@ public class UserSignUpHandler(IKeycloakGateway keycloakGateway)
         string commandUserId
     )
     {
-        string? googleLinkId = await _keycloakGateway.GetGoogleLinkedIdAsync(keycloakUserId);
+        string? googleLinkId = await _keycloakAdminGateway.GetGoogleLinkedIdAsync(keycloakUserId);
 
         return string.IsNullOrWhiteSpace(googleLinkId)
                 ? new UserSignUpCommandResponse
