@@ -5,22 +5,23 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SignUpKeycloakGoogleIntegration.WebApp.Pages;
-
-[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-[IgnoreAntiforgeryToken]
-public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
+namespace SignUpKeycloakGoogleIntegration.WebApp.Pages
 {
-    public string? RequestId { get; set; }
-
-    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-    private readonly ILogger<ErrorModel> _logger = logger;
-
-    public void OnGet()
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [IgnoreAntiforgeryToken]
+    public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
     {
-        RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        public string? RequestId { get; set; }
 
-        _logger.LogInformation("RequestId: {RequestId}", RequestId);
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+
+        private readonly ILogger<ErrorModel> _logger = logger;
+
+        public void OnGet()
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            _logger.LogInformation("RequestId: {RequestId}", RequestId);
+        }
     }
 }

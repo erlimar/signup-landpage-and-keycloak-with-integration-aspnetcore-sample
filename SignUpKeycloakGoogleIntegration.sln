@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E8068912-1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignUpKeycloakGoogleIntegration.ApplicationTests", "test\ApplicationTests\SignUpKeycloakGoogleIntegration.ApplicationTests.csproj", "{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignUpKeycloakGoogleIntegration.KeycloakAdminAdapter", "src\KeycloakAdminAdapter\SignUpKeycloakGoogleIntegration.KeycloakAdminAdapter.csproj", "{4499BAB5-2824-439A-A7C7-36F392DBD935}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,10 +36,15 @@ Global
 		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4499BAB5-2824-439A-A7C7-36F392DBD935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4499BAB5-2824-439A-A7C7-36F392DBD935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4499BAB5-2824-439A-A7C7-36F392DBD935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4499BAB5-2824-439A-A7C7-36F392DBD935}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF85805D-C3BD-449A-BEFF-0A5CA25428C3} = {DCDBE456-946C-4056-B606-F80FB3F57F0C}
 		{2DF761A2-7644-44A3-BE83-C69E083E0898} = {DCDBE456-946C-4056-B606-F80FB3F57F0C}
 		{E3DFFB6A-9CAF-4288-A74F-CA42EFCE9BC5} = {E8068912-1F23-4369-9208-09FE90CF789A}
+		{4499BAB5-2824-439A-A7C7-36F392DBD935} = {DCDBE456-946C-4056-B606-F80FB3F57F0C}
 	EndGlobalSection
 EndGlobal

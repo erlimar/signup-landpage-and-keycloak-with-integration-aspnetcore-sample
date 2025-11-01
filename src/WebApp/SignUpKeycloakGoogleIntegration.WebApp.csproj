@@ -10,11 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Duende.AccessTokenManagement" Version="4.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.*" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\SignUpKeycloakGoogleIntegration.Application.csproj" />
+    <ProjectReference Include="..\KeycloakAdminAdapter\SignUpKeycloakGoogleIntegration.KeycloakAdminAdapter.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,41 @@
 // Copyright (c) 2025 Erlimar Silva Campos. All Rights Reserved.
 // This file is a part of SignUpKeycloakGoogleIntegration
 
+using Duende.AccessTokenManagement;
+using Keycloak.AuthServices.Common;
+using Keycloak.AuthServices.Sdk;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using SignUpKeycloakGoogleIntegration.Application;
+using SignUpKeycloakGoogleIntegration.Application.UserSignUp;
+using SignUpKeycloakGoogleIntegration.KeycloakAdminAdapter;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<IKeycloakAdminGateway, KeycloakAdminGatewayAdapter>();
+builder.Services.AddTransient<UserSignUpHandler>();
+
+KeycloakAdminClientOptions? keycloakAdminOptions =
+    builder.Configuration.GetKeycloakOptions<KeycloakAdminClientOptions>()!;
+
+builder.Services.AddDistributedMemoryCache();
+builder
+    .Services.AddClientCredentialsTokenManagement()
+    .AddClient(
+        ClientCredentialsClientName.Parse(keycloakAdminOptions.Resource),
+        client =>
+        {
+            client.ClientId = ClientId.Parse(keycloakAdminOptions.Resource);
+            client.ClientSecret = ClientSecret.Parse(keycloakAdminOptions.Credentials.Secret);
+            client.TokenEndpoint = new Uri(keycloakAdminOptions.KeycloakTokenEndpoint);
+        }
+    );
+
+builder
+    .Services.AddKeycloakAdminHttpClient(keycloakAdminOptions)
+    .AddClientCredentialsTokenHandler(
+        ClientCredentialsClientName.Parse(keycloakAdminOptions.Resource)
+    );
 
 // Add services to the container.
 builder.Services.AddRazorPages();
