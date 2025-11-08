@@ -21,12 +21,7 @@ public interface IKeycloakAdminGateway
     Task<string?> GetGoogleLinkedIdAsync(string userId);
 
     /// <summary>
-    /// Grava um novo usuário
+    /// Grava um novo usuário com credenciais Google
     /// </summary>
-    Task<string> WriteNewUser(string name, string email);
-
-    /// <summary>
-    /// Vincula um usuário a uma conta Google
-    /// </summary>
-    Task WriteGoogleLink(string keycloakUserId, string googleUserId);
+    Task<string> WriteNewGoogleUser(string name, string email, string googleUserId);
 }

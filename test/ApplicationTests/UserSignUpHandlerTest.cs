@@ -2,7 +2,9 @@
 // This file is a part of SignUpKeycloakGoogleIntegration
 
 using FluentValidation;
+
 using Moq;
+
 using SignUpKeycloakGoogleIntegration.Application;
 using SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
@@ -261,7 +263,7 @@ public class UserSignUpHandlerTest
             .ReturnsAsync(null! as string);
 
         _ = keycloakAdminGatewayMock
-            .Setup(m => m.WriteNewUser(command.Name, command.Email))
+            .Setup(m => m.WriteNewGoogleUser(command.Name, command.Email, command.GoogleId))
             .ReturnsAsync("novo-usuario-id-keycloak");
 
         UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
@@ -278,11 +280,7 @@ public class UserSignUpHandlerTest
             Times.Never
         );
         keycloakAdminGatewayMock.Verify(
-            v => v.WriteNewUser(command.Name, command.Email),
-            Times.Once
-        );
-        keycloakAdminGatewayMock.Verify(
-            v => v.WriteGoogleLink("novo-usuario-id-keycloak", command.GoogleId),
+            v => v.WriteNewGoogleUser(command.Name, command.Email, command.GoogleId),
             Times.Once
         );
     }

@@ -2,13 +2,17 @@
 // This file is a part of SignUpKeycloakGoogleIntegration
 
 using System.Security.Claims;
+using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+
 using SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
 namespace SignUpKeycloakGoogleIntegration.WebApp.Pages;
 
 [Authorize]
+[SuppressMessage("Performance", "CA1848", Justification = "Este é um código de exemplo.")]
 public class IndexModel(ILogger<IndexModel> logger, UserSignUpHandler userSignUpHandler) : PageModel
 {
     private readonly UserSignUpHandler _userSignUpHandler =
@@ -20,8 +24,8 @@ public class IndexModel(ILogger<IndexModel> logger, UserSignUpHandler userSignUp
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
 
-    public string ResponseType { get; private set; } = string.Empty;
-    public string ResponseMessage { get; private set; } = string.Empty;
+    public UserSignUpResponseType ResponseType { get; private set; }
+    public string? ResponseFailedMessage { get; private set; } = string.Empty;
 
     public async Task OnGetAsync()
     {
@@ -48,7 +52,11 @@ public class IndexModel(ILogger<IndexModel> logger, UserSignUpHandler userSignUp
             }
         );
 
-        ResponseType = response?.ResponseType.ToString() ?? string.Empty;
-        ResponseMessage = response?.ResponseMessage ?? string.Empty;
+        ResponseType = response.ResponseType;
+
+        if (ResponseType == UserSignUpResponseType.Failed)
+        {
+            ResponseFailedMessage = response.ResponseMessage;
+        }
     }
 }

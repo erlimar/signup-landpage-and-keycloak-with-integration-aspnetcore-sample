@@ -23,20 +23,23 @@ public class UserSignUpHandler(IKeycloakAdminGateway keycloakAdminGateway)
             return await ValidarUsuarioCadastrado(keycloakUserId, command.GoogleId);
         }
 
-        var newUserKeycloakId = await _keycloakAdminGateway.WriteNewUser(
+        keycloakUserId = await _keycloakAdminGateway.WriteNewGoogleUser(
             command.Name,
-            command.Email
+            command.Email,
+            command.GoogleId
         );
 
-        // TODO: Falhar se não for um Id válido
-
-        await _keycloakAdminGateway.WriteGoogleLink(newUserKeycloakId, command.GoogleId);
-
-        return new UserSignUpCommandResponse
-        {
-            ResponseType = UserSignUpResponseType.NewRegistration,
-            ResponseMessage = null,
-        };
+        return string.IsNullOrWhiteSpace(keycloakUserId)
+            ? new UserSignUpCommandResponse
+            {
+                ResponseType = UserSignUpResponseType.Failed,
+                ResponseMessage = "Falha ao criar o usuário no Keycloak",
+            }
+            : new UserSignUpCommandResponse
+            {
+                ResponseType = UserSignUpResponseType.NewRegistration,
+                ResponseMessage = null,
+            };
     }
 
     private async Task<UserSignUpCommandResponse> ValidarUsuarioCadastrado(

@@ -1,25 +1,47 @@
 ﻿@page
+@using SignUpKeycloakGoogleIntegration.Application.UserSignUp
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+  ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Seja bem vindo!</h1>
-    <p>{{ @Model.FullName | @User.Identity.AuthenticationType }}</p>
+  <h1 class="display-4">Seja bem vindo!</h1>
+  <p>{{ @Model.FullName | @User.Identity?.AuthenticationType }}</p>
+  <hr />
+  <h4>Claims:</h4>
+  @foreach (var c in User.Claims)
+  {
+    <span>@c.Type: <strong>@c.Value</strong><br /></span>
+  }
 
-    <hr />
-    <h4>Claims:</h4>
-    @foreach (var c in User.Claims)
-    {
-      <span>@c.Type: <strong>@c.Value</strong><br /></span>
-    }
+  <hr />
+  <h4>Properties:</h4>
+  <span>Id: @Model.Id</span><br />
+  <span>Email: @Model.Email</span><br />
+  <span>FullName: @Model.FullName</span><br />
+  <span>FirstName: @Model.FirstName</span><br />
+  <span>LastName: @Model.LastName</span><br />
 
+  @if (Model.ResponseType == UserSignUpResponseType.Failed)
+  {
     <hr />
-    <h4>Properties:</h4>
-    <span>Id: @Model.Id</span><br />
-    <span>Email: @Model.Email</span><br />
-    <span>FullName: @Model.FullName</span><br />
-    <span>FirstName: @Model.FirstName</span><br />
-    <span>LastName: @Model.LastName</span><br />
+    <p style="background-color:red; color:white">Erro: @Model.ResponseFailedMessage</p>
+  }
+  else if (Model.ResponseType == UserSignUpResponseType.RegisteredWithoutLink)
+  {
+    <hr />
+    <p style="background-color:orange">Atenção! Usuário já está cadastrado, porém sem vínculo com Google. Você deve
+      vincular sua conta Google na sua área de usuário.</p>
+  }
+  else if (Model.ResponseType == UserSignUpResponseType.NewRegistration)
+  {
+    <hr />
+    <p style="background-color:lightgreen">Parabéns! Você foi cadastrado com sucesso. Siga para sua área de usuário agora mesmo!</p>
+  }
+  else if (Model.ResponseType == UserSignUpResponseType.AlreadyRegistered)
+  {
+    <hr />
+    <p style="background-color:lightblue">Você já está registrado. Siga para sua área de usuário.</p>
+  }
 </div>

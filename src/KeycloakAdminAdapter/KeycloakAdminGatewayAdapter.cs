@@ -2,11 +2,14 @@
 // This file is a part of SignUpKeycloakGoogleIntegration
 
 using System.Text.RegularExpressions;
+
 using Keycloak.AuthServices.Sdk;
 using Keycloak.AuthServices.Sdk.Admin;
 using Keycloak.AuthServices.Sdk.Admin.Models;
 using Keycloak.AuthServices.Sdk.Admin.Requests.Users;
+
 using Microsoft.Extensions.Options;
+
 using SignUpKeycloakGoogleIntegration.Application;
 
 namespace SignUpKeycloakGoogleIntegration.KeycloakAdminAdapter;
@@ -23,9 +26,19 @@ public partial class KeycloakAdminGatewayAdapter(
         keycloakAdminClientOptions?.Value
         ?? throw new ArgumentNullException(nameof(keycloakAdminClientOptions));
 
-    public Task<string?> GetGoogleLinkedIdAsync(string userId)
+    public async Task<string?> GetGoogleLinkedIdAsync(string userId)
     {
-        throw new NotImplementedException();
+        var user = await _keycloakUserClient.GetUserAsync(_keycloakAdminClientOptions.Realm, userId);
+
+        if (user?.FederatedIdentities == null || user.FederatedIdentities.Count == 0)
+        {
+            return null;
+        }
+
+        var googleIdentity = user.FederatedIdentities
+            .FirstOrDefault(fi => fi.IdentityProvider == "google");
+
+        return googleIdentity?.UserId;
     }
 
     public async Task<string?> GetUserIdByEmailAsync(string userEmail)
@@ -43,12 +56,7 @@ public partial class KeycloakAdminGatewayAdapter(
         return users.FirstOrDefault()?.Id;
     }
 
-    public Task WriteGoogleLink(string keycloakUserId, string googleUserId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<string> WriteNewUser(string name, string email)
+    public async Task<string> WriteNewGoogleUser(string name, string email, string googleUserId)
     {
         var response = await _keycloakUserClient.CreateUserWithResponseAsync(
             _keycloakAdminClientOptions.Realm,
@@ -61,6 +69,14 @@ public partial class KeycloakAdminGatewayAdapter(
                 Enabled = true,
                 // TODO: Mudar na origem para user FirstName + LastName ao invés de FullName
                 FirstName = name,
+
+                FederatedIdentities = new List<FederatedIdentityRepresentation>() {
+                    new FederatedIdentityRepresentation {
+                        IdentityProvider = "google",
+                        UserId = googleUserId,
+                        UserName = email
+                    }
+                }
             }
         );
 

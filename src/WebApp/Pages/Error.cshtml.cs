@@ -2,6 +2,8 @@
 // This file is a part of SignUpKeycloakGoogleIntegration
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,6 +11,7 @@ namespace SignUpKeycloakGoogleIntegration.WebApp.Pages
 {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
+    [SuppressMessage("Performance", "CA1848", Justification = "Este é um código de exemplo.")]
     public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
     {
         public string? RequestId { get; set; }
