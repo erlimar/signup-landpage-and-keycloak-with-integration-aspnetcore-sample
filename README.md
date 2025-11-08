@@ -11,8 +11,15 @@ válido cadastrado no Keycloak, onde ele poderá fazer login usando sua conta do
 
 Primeiramente você vai precisar configurar o ID e segredo de sua aplicação Google:
 ```sh
+# Shell Script
 ./eng/secrets-set.sh Authentication:Google:ClientId "<valor>"
 ./eng/secrets-set.sh Authentication:Google:ClientSecret "<valor>"
+```
+
+```powershell
+# PowerShell
+.\eng\secrets-set.ps1 Authentication:Google:ClientId "<valor>"
+.\eng\secrets-set.ps1 Authentication:Google:ClientSecret "<valor>"
 ```
 
 ```sh
