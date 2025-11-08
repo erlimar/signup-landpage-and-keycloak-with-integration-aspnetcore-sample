@@ -48,7 +48,8 @@ public class IndexModel(ILogger<IndexModel> logger, UserSignUpHandler userSignUp
             {
                 GoogleId = Id,
                 Email = Email,
-                Name = FullName,
+                FirstName = FirstName,
+                LastName = LastName
             }
         );
 

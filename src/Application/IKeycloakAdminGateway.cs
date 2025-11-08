@@ -23,5 +23,5 @@ public interface IKeycloakAdminGateway
     /// <summary>
     /// Grava um novo usuário com credenciais Google
     /// </summary>
-    Task<string> WriteNewGoogleUser(string name, string email, string googleUserId);
+    Task<string> WriteNewGoogleUser(string firstName, string lastName, string email, string googleUserId);
 }

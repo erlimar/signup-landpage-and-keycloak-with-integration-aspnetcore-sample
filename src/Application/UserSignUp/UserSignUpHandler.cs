@@ -24,7 +24,8 @@ public class UserSignUpHandler(IKeycloakAdminGateway keycloakAdminGateway)
         }
 
         keycloakUserId = await _keycloakAdminGateway.WriteNewGoogleUser(
-            command.Name,
+            command.FirstName,
+            command.LastName,
             command.Email,
             command.GoogleId
         );

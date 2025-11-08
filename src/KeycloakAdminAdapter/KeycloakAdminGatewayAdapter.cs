@@ -56,7 +56,7 @@ public partial class KeycloakAdminGatewayAdapter(
         return users.FirstOrDefault()?.Id;
     }
 
-    public async Task<string> WriteNewGoogleUser(string name, string email, string googleUserId)
+    public async Task<string> WriteNewGoogleUser(string firstName, string lastName, string email, string googleUserId)
     {
         var response = await _keycloakUserClient.CreateUserWithResponseAsync(
             _keycloakAdminClientOptions.Realm,
@@ -67,8 +67,8 @@ public partial class KeycloakAdminGatewayAdapter(
                 // Por estar sendo cadastrado com Google, assumimos a verificação como certa
                 EmailVerified = true,
                 Enabled = true,
-                // TODO: Mudar na origem para user FirstName + LastName ao invés de FullName
-                FirstName = name,
+                FirstName = firstName,
+                LastName = lastName,
 
                 FederatedIdentities = new List<FederatedIdentityRepresentation>() {
                     new FederatedIdentityRepresentation {

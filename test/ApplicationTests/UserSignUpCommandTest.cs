@@ -2,6 +2,7 @@
 // This file is a part of SignUpKeycloakGoogleIntegration
 
 using FluentValidation;
+
 using SignUpKeycloakGoogleIntegration.Application.UserSignUp;
 
 namespace SignUpKeycloakGoogleIntegration.ApplicationTests;
@@ -22,7 +23,8 @@ public class UserSignUpCommandTest
         UserSignUpCommand command = new()
         {
             GoogleId = invalidId,
-            Name = "ValidUserName",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
             Email = "valid@email.com",
         };
 
@@ -37,7 +39,7 @@ public class UserSignUpCommandTest
     }
 
     /// <summary>
-    /// O nome do usuário deve ser informado, e não pode ser uma string
+    /// O primeiro nome do usuário deve ser informado, e não pode ser uma string
     /// vazia ou apenas com espaços em branco.
     /// </summary>
     [Theory]
@@ -45,11 +47,41 @@ public class UserSignUpCommandTest
     [InlineData("")]
     [InlineData("   ")]
     [Trait("target", nameof(UserSignUpCommand))]
-    public void NameDeveSerInformado(string invalidName)
+    public void FirstNameDeveSerInformado(string invalidName)
     {
         UserSignUpCommand command = new()
         {
-            Name = invalidName,
+            FirstName = invalidName,
+            LastName = "ValidLastName",
+            GoogleId = "ValidUserId",
+            Email = "valid@email.com",
+        };
+
+        UserSignUpValidator validator = new();
+
+        ValidationException ex = Assert.Throws<ValidationException>(() =>
+            validator.ValidateAndThrow(command)
+        );
+
+        _ = Assert.Single(ex.Errors);
+        Assert.Contains("Name:", ex.Message);
+    }
+
+    /// <summary>
+    /// O último nome do usuário deve ser informado, e não pode ser uma string
+    /// vazia ou apenas com espaços em branco.
+    /// </summary>
+    [Theory]
+    [InlineData(null!)]
+    [InlineData("")]
+    [InlineData("   ")]
+    [Trait("target", nameof(UserSignUpCommand))]
+    public void LastNameDeveSerInformado(string invalidName)
+    {
+        UserSignUpCommand command = new()
+        {
+            LastName = invalidName,
+            FirstName = "ValidFirstName",
             GoogleId = "ValidUserId",
             Email = "valid@email.com",
         };
@@ -82,7 +114,8 @@ public class UserSignUpCommandTest
         {
             Email = invalidEmail,
             GoogleId = "ValidUserId",
-            Name = "ValidUserName",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         UserSignUpValidator validator = new();

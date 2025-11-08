@@ -72,7 +72,8 @@ public class UserSignUpHandlerTest
         {
             GoogleId = "user-id",
             Email = "user@email.com",
-            Name = "User Name",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
@@ -102,7 +103,8 @@ public class UserSignUpHandlerTest
         {
             GoogleId = "user-id",
             Email = "user@email.com",
-            Name = "User Name",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
@@ -137,7 +139,8 @@ public class UserSignUpHandlerTest
         {
             GoogleId = "user-id",
             Email = "user@email.com",
-            Name = "User Name",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
@@ -177,7 +180,8 @@ public class UserSignUpHandlerTest
         {
             GoogleId = "user-id",
             Email = "user@email.com",
-            Name = "User Name",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
@@ -217,7 +221,8 @@ public class UserSignUpHandlerTest
         {
             GoogleId = "user-id",
             Email = "user@email.com",
-            Name = "User Name",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
@@ -253,7 +258,8 @@ public class UserSignUpHandlerTest
         {
             GoogleId = "user-id",
             Email = "user@email.com",
-            Name = "User Name",
+            FirstName = "ValidFirstName",
+            LastName = "ValidLastName",
         };
 
         Mock<IKeycloakAdminGateway> keycloakAdminGatewayMock = new();
@@ -263,7 +269,7 @@ public class UserSignUpHandlerTest
             .ReturnsAsync(null! as string);
 
         _ = keycloakAdminGatewayMock
-            .Setup(m => m.WriteNewGoogleUser(command.Name, command.Email, command.GoogleId))
+            .Setup(m => m.WriteNewGoogleUser(command.FirstName, command.LastName, command.Email, command.GoogleId))
             .ReturnsAsync("novo-usuario-id-keycloak");
 
         UserSignUpHandler handler = new(keycloakAdminGatewayMock.Object);
@@ -280,7 +286,7 @@ public class UserSignUpHandlerTest
             Times.Never
         );
         keycloakAdminGatewayMock.Verify(
-            v => v.WriteNewGoogleUser(command.Name, command.Email, command.GoogleId),
+            v => v.WriteNewGoogleUser(command.FirstName, command.LastName, command.Email, command.GoogleId),
             Times.Once
         );
     }
@@ -294,7 +300,8 @@ public class UserSignUpHandlerTest
                 new UserSignUpCommand
                 {
                     GoogleId = "",
-                    Name = "ValidName",
+                    FirstName = "ValidFirstName",
+                    LastName = "ValidLastName",
                     Email = "valid@email",
                 },
             ],
@@ -302,7 +309,8 @@ public class UserSignUpHandlerTest
                 new UserSignUpCommand
                 {
                     GoogleId = "ValidId",
-                    Name = "",
+                    FirstName = "",
+                    LastName = "ValidLastName",
                     Email = "valid@email",
                 },
             ],
@@ -310,7 +318,18 @@ public class UserSignUpHandlerTest
                 new UserSignUpCommand
                 {
                     GoogleId = "ValidId",
-                    Name = "ValidName",
+                    FirstName = "ValidFirstName",
+                    LastName = "",
+                    Email = "valid@email",
+                },
+            ],
+
+            [
+                new UserSignUpCommand
+                {
+                    GoogleId = "ValidId",
+                    FirstName = "ValidFirstName",
+                    LastName = "ValidLastName",
                     Email = "",
                 },
             ],
